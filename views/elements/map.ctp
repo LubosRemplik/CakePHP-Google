@@ -18,7 +18,7 @@ echo $this->Html->scriptBlock(
 		var map = new google.maps.Map(document.getElementById('map_canvas'), myOptions);
 		var infoWindow;
 		infoWindow = new google.maps.InfoWindow();
-	    infoWindow.setContent('$content');
+	    infoWindow.setContent(\"$content\");
 	    infoWindow.setPosition(myLatlng);
 	    infoWindow.open(map);
 	}
