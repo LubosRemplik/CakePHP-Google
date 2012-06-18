@@ -3,7 +3,7 @@
  * Retrieves latitude and longitude from Google using information in passed data array. 
  * Subsequently adds retruned coordinates to passed data array.
  */
-class MapCoordinateBehavior extends ModelBehavior {
+class GoogleMapCoordinateBehavior extends ModelBehavior {
 	
 	public function setup($model, $settings = array()) {
 		$settings = (array) $settings;
