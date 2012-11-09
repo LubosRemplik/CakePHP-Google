@@ -32,6 +32,19 @@ class GoogleApi extends AppModel {
 		$this->_config = CakeSession::read($this->_strategy);
 	}
 
+	protected function _generateCacheKey() {
+		$backtrace = debug_backtrace();
+		$cacheKey = array();
+		$cacheKey[] = $this->alias;
+		if (!empty($backtrace[2]['function'])) {
+			$cacheKey[] = $backtrace[2]['function'];
+		}
+		if ($backtrace[2]['args']) {
+			$cacheKey[] = md5(serialize($backtrace[2]['args']));	
+		}
+		return implode('_', $cacheKey);
+	}
+
 	protected function _parseResponse($response) {
 		$results = json_decode($response->body);
 		if (is_object($results)) {
@@ -41,6 +54,19 @@ class GoogleApi extends AppModel {
 	}
 
 	protected function _request($path, $request = array()) {
+		// preparing request
+		$request = Hash::merge($this->_request, $request);
+		$request['uri']['path'] .= $path;
+		$request['header']['Authorization'] = sprintf('OAuth %s', $this->_config['token']);
+		// Read cached GET results
+		if ($request['method'] == 'GET') {
+			$cacheKey = $this->_generateCacheKey();
+			$results = Cache::read($cacheKey);
+			if ($results !== false) {
+				return $results;
+			}
+		}
+
 		// createding http socket object for later use
 		$HttpSocket = new HttpSocket();
 
@@ -100,11 +126,6 @@ class GoogleApi extends AppModel {
 			}
 		}
 
-		// preparing request
-		$request = Hash::merge($this->_request, $request);
-		$request['uri']['path'] .= $path;
-		$request['header']['Authorization'] = sprintf('OAuth %s', $this->_config['token']);
-
 		// issuing request
 		$response = $HttpSocket->request($request);
 
@@ -120,7 +141,10 @@ class GoogleApi extends AppModel {
 		// parsing response
 		$results = $this->_parseResponse($response);
 
-		// return results
+		// cache and return results
+		if ($request['method'] == 'GET') {
+			Cache::write($cacheKey, $results);
+		}
 		return $results;
 	}
 }
