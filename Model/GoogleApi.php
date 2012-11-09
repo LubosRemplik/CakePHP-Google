@@ -22,14 +22,14 @@ class GoogleApi extends AppModel {
 
 	public function __construct($id = false, $table = null, $ds = null) {
 		parent::__construct($id, $table, $ds);
-		$session = CakeSession::read($this->_strategy);
-		$configure = Configure::read(sprintf(
-			'Opauth.Strategy.%s', 
-			$this->_strategy
-		));
-		if (!empty($session) && !empty($configure)) {
-			$this->_config = array_merge($session, $configure);
+		if (!CakeSession::check($this->_strategy)) {
+			$config = ClassRegistry::init('Opauth.OpauthSetting')
+				->findByName($this->_strategy);
+			if (!empty($config['OpauthSetting'])) {
+				CakeSession::write($this->_strategy, $config['OpauthSetting']);
+			}
 		}
+		$this->_config = CakeSession::read($this->_strategy);
 	}
 
 	protected function _parseResponse($response) {
@@ -46,8 +46,9 @@ class GoogleApi extends AppModel {
 
 		// checking access token expires time, using refresh token when needed
 		$date = date('c', time());
-		if($date > $this->_config['credentials']['expires'] 
-		& isset($this->_config['credentials']['refresh_token'])) {
+		if(isset($this->_config['expires']) 
+		&& isset($this->_config['refresh_token'])
+		&& $date > $this->_config['expires']) {
 
 			// getting new credentials
 			$requestRefreshToken = array(
@@ -61,7 +62,7 @@ class GoogleApi extends AppModel {
 					'client_id=%s&client_secret=%s&refresh_token=%s&grant_type=refresh_token',
 					$this->_config['client_id'],
 					$this->_config['client_secret'],
-					$this->_config['credentials']['refresh_token']
+					$this->_config['refresh_token']
 				),
 				'header' => array(
 					'Content-Type' => 'application/x-www-form-urlencoded'
@@ -82,17 +83,27 @@ class GoogleApi extends AppModel {
 			);
 
 			// saving new credentials
-			$this->_config['credentials'] = array_merge(
-				$this->_config['credentials'],
+			$this->_config = array_merge(
+				$this->_config,
 				$credentials
 			);
-			CakeSession::write(sprintf('%s.credentials', $this->_strategy), $this->_config['credentials']);
+			CakeSession::write(sprintf('%s', $this->_strategy), $this->_config);
+
+			// writing into db
+			$OpauthSetting = ClassRegistry::init('Opauth.OpauthSetting');
+			$data = $OpauthSetting->findByName($this->_strategy);
+			if ($data) {
+				$OpauthSetting->id = $data['OpauthSetting']['id'];
+				$this->OpauthSetting->save(array_merge(
+					$data['OpauthSetting'], $this->_config
+				));
+			}
 		}
 
 		// preparing request
 		$request = Hash::merge($this->_request, $request);
 		$request['uri']['path'] .= $path;
-		$request['header']['Authorization'] = sprintf('OAuth %s', $this->_config['credentials']['token']);
+		$request['header']['Authorization'] = sprintf('OAuth %s', $this->_config['token']);
 
 		// issuing request
 		$response = $HttpSocket->request($request);
