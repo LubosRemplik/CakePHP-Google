@@ -120,7 +120,7 @@ class GoogleApi extends AppModel {
 			$data = $OpauthSetting->findByName($this->_strategy);
 			if ($data) {
 				$OpauthSetting->id = $data['OpauthSetting']['id'];
-				$this->OpauthSetting->save(array_merge(
+				$OpauthSetting->save(array_merge(
 					$data['OpauthSetting'], $this->_config
 				));
 			}
