@@ -133,7 +133,7 @@ class GoogleApi extends AppModel {
 		$response = $HttpSocket->request($request);
 
 		// olny valid response is going to be parsed
-		if ($response->code != 200) {
+		if (substr($response->code, 0, 1) != 2) {
 			if (Configure::read('debug')) {
 				debug($request);
 				debug($response->body);
