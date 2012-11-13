@@ -124,6 +124,9 @@ class GoogleApi extends AppModel {
 					$data['OpauthSetting'], $this->_config
 				));
 			}
+
+			// writing authorization token again (refreshed one)
+			$request['header']['Authorization'] = sprintf('OAuth %s', $this->_config['token']);
 		}
 
 		// issuing request
