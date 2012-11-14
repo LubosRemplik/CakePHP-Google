@@ -35,7 +35,7 @@ class GoogleCalendarEvents extends GoogleApi {
 		);
 		Cache::clear();
 		$events = $this->listItems($calendarId, $listOptions);
-		while (count($events['items']) > 0) {
+		while (!empty($events['items']) && count($events['items']) > 0) {
 			foreach ($events['items'] as $item) {
 				$deleted = $this->delete($calendarId, $item['id']);
 				if (!empty($deleted)) {
