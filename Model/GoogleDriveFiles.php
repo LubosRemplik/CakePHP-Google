@@ -19,7 +19,6 @@ class GoogleDriveFiles extends GoogleApi {
 	public function insert($file, $options = array()) {
 		$request = array();
 		$request['method'] = 'POST';
-		$request['uri']['query'] = $options;
 		$body = array(
 			'title' => $file['name'],
 			'mimeType' => $file['type']
