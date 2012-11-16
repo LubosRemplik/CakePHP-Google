@@ -1,5 +1,5 @@
 <?php
-App::uses('AppModel', 'App.Model');
+App::uses('AppModel', 'Model');
 App::uses('CakeSession', 'Model/Datasource');
 App::uses('Hash', 'Utility');
 App::uses('HttpSocket', 'Network/Http');
