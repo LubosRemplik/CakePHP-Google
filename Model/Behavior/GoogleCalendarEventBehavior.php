@@ -2,9 +2,14 @@
 class GoogleCalendarEventBehavior extends ModelBehavior {
 
 	public function setup($model, $settings = array()) {
+		if (empty($settings['calendarId'])) {
+			$settings['calendarId'] = Configure::read('Google.Events.calendarId');
+		}
+		if (empty($settings['calendarId']) && class_exists('AppPreference')) {
+			$settings['calendarId'] = AppPreference::get('Google.calendar_id');
+		}
 		if (!isset($this->settings[$model->alias])) {
 			$this->settings[$model->alias] = array(
-				'calendarId' => false,
 				'scope' => array(),
 			);
 		}
@@ -65,9 +70,29 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 					array('callbacks' => false)
 				);
 			} else {
+				$eventId = $model->data['Event']['google_event_id'];
 				$saved = $Events->update($calendarId, $eventId, $data);
 			}
 		}
 		return true;
+	}
+
+	public function afterDelete($model) {
+		$allowed = true;
+		if (empty($model->data)) {
+			$model->data = $model->read();
+		}
+		if (!$this->settings[$model->alias]['calendarId']) {
+			$allowed = false;
+		}
+		if (empty($model->data[$model->alias]['google_event_id'])) {
+			$allowed = false;
+		}
+		if ($allowed) {
+			$Events = ClassRegistry::init('Google.GoogleCalendarEvents');
+			$calendarId = $this->settings[$model->alias]['calendarId'];
+			$eventId = $model->data[$model->alias]['google_event_id'];
+			$Events->delete($calendarId, $eventId);
+		}
 	}
 }
