@@ -3,7 +3,7 @@ CakePHP Google API Plugin
 
 Requirements
 ------------
-[CakePHP v2.x](https://github.com/cakephp/cakephp)
+[CakePHP v2.x](https://github.com/cakephp/cakephp)   
 [Opauth](https://github.com/LubosRemplik/cakephp-opauth)
 
 Sample
@@ -35,7 +35,7 @@ Sample
 	vim Config/bootstrap.php
 	```
 
-*Note* You have to configure [Opauth](https://github.com/LubosRemplik/cakephp-opauth) correctly
+**Note** You have to configure [Opauth](https://github.com/LubosRemplik/cakephp-opauth) correctly
 
 
 How to use it
