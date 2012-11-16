@@ -12,6 +12,25 @@ class GoogleDriveFiles extends GoogleApi {
 			'path' => '/drive/v2/files',
 		)
 	);
+	
+	/**
+	 * https://developers.google.com/drive/v2/reference/files/delete
+	 **/
+	public function delete($id, $options = array()) {
+		$request = array();
+		$request['uri']['query'] = $options;
+		$request['method'] = 'DELETE';
+		return $this->_request(sprintf('/%s', $id), $request);
+	}
+	
+	/**
+	 * https://developers.google.com/drive/v2/reference/files/get
+	 **/
+	public function get($id, $options = array()) {
+		$request = array();
+		$request['uri']['query'] = $options;
+		return $this->_request(sprintf('/%s', $id), $request);
+	}
 
 	/**
 	 * https://developers.google.com/drive/v2/reference/files/insert
