@@ -96,7 +96,7 @@ class GoogleApi extends AppModel {
 			);
 			$response = $HttpSocket->request($requestRefreshToken);
 			if ($response->code != 200) {
-				if (Configure::read('debug')) {
+				if (Configure::read('debugApis')) {
 					debug($requestRefreshToken);
 					debug($response->body);
 				}
@@ -134,7 +134,7 @@ class GoogleApi extends AppModel {
 
 		// olny valid response is going to be parsed
 		if (substr($response->code, 0, 1) != 2) {
-			if (Configure::read('debug')) {
+			if (Configure::read('debugApis')) {
 				debug($request);
 				debug($response->body);
 			}
