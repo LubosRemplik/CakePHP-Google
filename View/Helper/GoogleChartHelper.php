@@ -46,7 +46,7 @@ class GoogleChartHelper extends AppHelper {
 
 		// transforming data into JS
 		$data = json_encode($data);
-		$options = json_encode($options, JSON_FORCE_OBJECT);
+		$options = json_encode((object)$options, JSON_FORCE_OBJECT);
 
 		// creating script block
 		$script = '';
