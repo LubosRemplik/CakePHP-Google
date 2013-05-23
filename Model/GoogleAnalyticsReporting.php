@@ -14,7 +14,7 @@ class GoogleAnalyticsReporting extends GoogleApi {
 	/**
 	 * https://developers.google.com/analytics/devguides/reporting/core/dimsmets
 	 **/
-	public function query($ids, $startDate, $endDate, $metrics, $dimensions = array(), $options = array()) {
+	public function request($ids, $startDate, $endDate, $metrics, $dimensions = array(), $options = array()) {
 		$request = array();
 		$request['uri']['query'] = array(
 			'ids' => $ids,

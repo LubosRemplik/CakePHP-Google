@@ -15,7 +15,7 @@ class GoogleDriveFilesUpload extends GoogleApi {
 	/**
 	 * https://developers.google.com/drive/v2/reference/files/insert
 	 **/
-	public function insert($file, $driveFile, $options = array()) {
+	public function insertFile($file, $driveFile, $options = array()) {
 		// setting default options
 		$options = array_merge(
 			array('convert' => 'true'),

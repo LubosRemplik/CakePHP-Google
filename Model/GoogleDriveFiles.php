@@ -16,7 +16,7 @@ class GoogleDriveFiles extends GoogleApi {
 	/**
 	 * https://developers.google.com/drive/v2/reference/files/delete
 	 **/
-	public function delete($id, $options = array()) {
+	public function deleteFile($id, $options = array()) {
 		$request = array();
 		$request['uri']['query'] = $options;
 		$request['method'] = 'DELETE';
@@ -26,7 +26,7 @@ class GoogleDriveFiles extends GoogleApi {
 	/**
 	 * https://developers.google.com/drive/v2/reference/files/get
 	 **/
-	public function get($id, $options = array()) {
+	public function getFile($id, $options = array()) {
 		$request = array();
 		$request['uri']['query'] = $options;
 		return $this->_request(sprintf('/%s', $id), $request);
@@ -35,7 +35,7 @@ class GoogleDriveFiles extends GoogleApi {
 	/**
 	 * https://developers.google.com/drive/v2/reference/files/insert
 	 **/
-	public function insert($file, $options = array()) {
+	public function insertFile($file, $options = array()) {
 		$request = array();
 		$request['method'] = 'POST';
 		$body = array(
@@ -44,7 +44,7 @@ class GoogleDriveFiles extends GoogleApi {
 		);
 		$request['body'] = json_encode($body);
 		$request['header']['Content-Type'] = 'application/json';
-		return $this->GoogleDriveFilesUpload->insert(
+		return $this->GoogleDriveFilesUpload->insertFile(
 			$file, $this->_request(null, $request),
 			$options
 		);
