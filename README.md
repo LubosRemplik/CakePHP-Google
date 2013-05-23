@@ -6,6 +6,35 @@ Requirements
 [CakePHP v2.x](https://github.com/cakephp/cakephp)   
 [Opauth](https://github.com/LubosRemplik/cakephp-opauth)
 
+How to use it
+-------------
+1.	Install this plugin for your CakePHP app.   
+	Assuming `APP` is the directory where your CakePHP app resides, it's usually `app/` from the base of CakePHP.
+
+	```bash
+	cd APP/Plugin
+	git clone git://github.com/LubosRemplik/CakePHP-Google-API-Plugin.git Google
+	```
+
+2.  Install required plugins with all dependcies and configuration
+	[Opauth](https://github.com/LubosRemplik/cakephp-opauth)
+
+3.  Connect google's account with your application http://example.org/auth/google
+
+4.  Include needed model in your controller or anywhere you want to
+
+	```php
+	$uses = array('Google.GoogleDriveFiles');
+	...
+	$data = $this->GoogleDriveFiles->listItems();
+	debug ($data);
+	```
+
+	```php
+	$data = ClassRegistry::init('Google.GoogleDriveFiles')->listItems();
+	debug ($data);
+	```
+
 Sample
 ------
 1.  Install [CakePHP Google API Plugin sample](https://github.com/LubosRemplik/CakePHP-Google-API-Plugin-sample)
@@ -36,33 +65,3 @@ Sample
 	```
 
 **Note** You have to configure [Opauth](https://github.com/LubosRemplik/cakephp-opauth) correctly
-
-
-How to use it
--------------
-1.	Install this plugin for your CakePHP app.   
-	Assuming `APP` is the directory where your CakePHP app resides, it's usually `app/` from the base of CakePHP.
-
-	```bash
-	cd APP/Plugin
-	git clone git://github.com/LubosRemplik/CakePHP-Google-API-Plugin.git Google
-	```
-
-2.  Install required plugins with all dependcies and configuration
-	[Opauth](https://github.com/LubosRemplik/cakephp-opauth)
-
-3.  Connect google's account with your application http://example.org/auth/google
-
-4.  Include needed model in your controller or anywhere you want to
-
-	```php
-	$uses = array('Google.GoogleDriveFiles');
-	...
-	$data = $this->GoogleDriveFiles->listItems();
-	debug ($data);
-	```
-
-	```php
-	$data = ClassRegistry::init('Google.GoogleDriveFiles')->listItems();
-	debug ($data);
-	```
