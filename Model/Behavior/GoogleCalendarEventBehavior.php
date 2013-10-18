@@ -1,7 +1,7 @@
 <?php
 class GoogleCalendarEventBehavior extends ModelBehavior {
 
-	public function setup($model, $settings = array()) {
+	public function setup(Model $model, $settings = array()) {
 		if (empty($settings['calendarId'])) {
 			$settings['calendarId'] = Configure::read('Google.Events.calendarId');
 		}
@@ -19,7 +19,7 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 		);
 	}
 
-	public function afterSave($model, $created) {
+	public function afterSave(Model $model, $created) {
 		$allowed = true;
 		if (empty($model->data)) {
 			$model->data = $model->read();
@@ -77,7 +77,7 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 		return true;
 	}
 
-	public function afterDelete($model) {
+	public function afterDelete(Model $model) {
 		$allowed = true;
 		if (empty($model->data)) {
 			$model->data = $model->read();
