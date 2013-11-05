@@ -19,7 +19,7 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 		);
 	}
 
-	public function afterSave(Model $model, $created) {
+	public function afterSave(Model $model, $created, $options = array()) {
 		$allowed = true;
 		if (empty($model->data)) {
 			$model->data = $model->read();
