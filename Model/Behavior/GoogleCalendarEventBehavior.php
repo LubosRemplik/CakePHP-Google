@@ -61,6 +61,20 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 					'date' => $endDate,
 				)
 			);
+			if (!empty($model->data[$model->alias]['content'])) {
+				$description = $model->data[$model->alias]['content'];
+				$description = str_replace('<br />', PHP_EOL, $description);
+				$description = strip_tags($description);
+				$data['description'] = $description;
+			}
+			if (!empty($model->data[$model->alias]['location'])) {
+				$location = $model->data[$model->alias]['location'];
+				$location = strip_tags($location);
+				$data['location'] = $location;
+			}
+			if (!empty($model->data[$model->alias]['color_id'])) {
+				$data['colorId'] = $model->data[$model->alias]['color_id'];
+			}
 			$Events = ClassRegistry::init('Google.GoogleCalendarEvents');
 			if ($created) {
 				$saved = $Events->insert($calendarId, $data);
