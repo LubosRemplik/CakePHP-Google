@@ -99,6 +99,7 @@ class GoogleApi extends AppModel {
 				if (Configure::read('debugApis')) {
 					debug($requestRefreshToken);
 					debug($response->body);
+					die;
 				}
 				return false;
 			}
@@ -137,6 +138,7 @@ class GoogleApi extends AppModel {
 			if (Configure::read('debugApis')) {
 				debug($request);
 				debug($response->body);
+				die;
 			}
 			return false;
 		}
