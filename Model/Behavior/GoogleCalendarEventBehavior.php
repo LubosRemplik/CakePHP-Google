@@ -40,9 +40,21 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 		$startTime = false;
 		$endTime = false;
 		if (!empty($model->data[$model->alias]['date'])) {
-			$startDate = $model->data[$model->alias]['date'];
-			$endDate = strtotime($model->data[$model->alias]['date']) + 24 * 3600;
-			$endDate = date('Y-m-d', $endDate);
+			$startDate = strtotime($model->data[$model->alias]['date']);
+			$startDate = date('Y-m-d', $startDate);
+			if (!empty($model->data[$model->alias]['date_to'])) {
+				$endDate = strtotime($model->data[$model->alias]['date_to']) + 24 * 3600;
+				$endDate = date('Y-m-d', $endDate);
+			} else {
+				$endDate = strtotime($model->data[$model->alias]['date']) + 24 * 3600;
+				$endDate = date('Y-m-d', $endDate);
+			}
+		}
+		if (!empty($model->data[$model->alias]['days'])) {
+			$until = gmdate("Ymd\THis\Z", strtotime($model->data[$model->alias]['date_to']));
+			$byDay = implode(',', $model->data[$model->alias]['days']);
+			$recurrence = array(sprintf('RRULE:FREQ=WEEKLY;UNTIL=%s;BYDAY=%s', $until, $byDay));
+			$endDate = $startDate;
 		}
 		if (empty($startDate) || empty($endDate)) {
 			$allowed = false;
@@ -61,6 +73,9 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 					'date' => $endDate,
 				)
 			);
+			if (!empty($recurrence)) {
+				$data['recurrence'] = $recurrence;
+			}
 			if (!empty($model->data[$model->alias]['content'])) {
 				$description = $model->data[$model->alias]['content'];
 				$description = str_replace('<br />', PHP_EOL, $description);
@@ -79,10 +94,7 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 			if ($created) {
 				$saved = $Events->insert($calendarId, $data);
 				$model->id = $model->data[$model->alias]['id'];
-				return $model->save(
-					array('google_event_id' => $saved['id']),
-					array('callbacks' => false)
-				);
+				return $model->saveField('google_event_id', $saved['id']);
 			} else {
 				$eventId = $model->data['Event']['google_event_id'];
 				$saved = $Events->update($calendarId, $eventId, $data);
