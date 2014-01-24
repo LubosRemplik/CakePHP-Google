@@ -68,7 +68,9 @@ class GoogleApi extends AppModel {
 		}
 
 		// createding http socket object for later use
-		$HttpSocket = new HttpSocket();
+		$HttpSocket = new HttpSocket(array(
+			'ssl_verify_host' => false
+		));
 
 		// checking access token expires time, using refresh token when needed
 		$date = date('c', time());
