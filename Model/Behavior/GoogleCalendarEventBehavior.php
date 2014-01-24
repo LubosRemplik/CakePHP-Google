@@ -59,9 +59,6 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 		if (empty($startDate) || empty($endDate)) {
 			$allowed = false;
 		}
-		if (!$created && empty($model->data[$model->alias]['google_event_id'])) {
-			$allowed = false;
-		}
 		if ($allowed) {
 			$calendarId = $this->settings[$model->alias]['calendarId'];
 			$data = array(
@@ -91,13 +88,27 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 				$data['colorId'] = $model->data[$model->alias]['color_id'];
 			}
 			$Events = ClassRegistry::init('Google.GoogleCalendarEvents');
-			if ($created) {
+			if (empty($model->data[$model->alias]['google_event_id'])) {
 				$saved = $Events->insert($calendarId, $data);
 				$model->id = $model->data[$model->alias]['id'];
 				return $model->saveField('google_event_id', $saved['id']);
 			} else {
 				$eventId = $model->data['Event']['google_event_id'];
 				$saved = $Events->update($calendarId, $eventId, $data);
+			}
+		} else if (!$allowed && !empty($model->data[$model->alias]['google_event_id'])) {
+			$deleteAllowed = true;
+			if (!$this->settings[$model->alias]['calendarId']) {
+				$deleteAllowed = false;
+			}
+			if (empty($model->data[$model->alias]['google_event_id'])) {
+				$deleteAllowed = false;
+			}
+			if ($deleteAllowed) {
+				$Events = ClassRegistry::init('Google.GoogleCalendarEvents');
+				$calendarId = $this->settings[$model->alias]['calendarId'];
+				$eventId = $model->data[$model->alias]['google_event_id'];
+				$Events->delete($calendarId, $eventId);
 			}
 		}
 		return true;
