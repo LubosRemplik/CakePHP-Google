@@ -51,6 +51,7 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 			}
 		}
 		if (!empty($model->data[$model->alias]['days'])) {
+			date_default_timezone_set('UTC');
 			$until = gmdate("Ymd\THis\Z", strtotime($model->data[$model->alias]['date_to']));
 			$byDay = implode(',', $model->data[$model->alias]['days']);
 			$recurrence = array(sprintf('RRULE:FREQ=WEEKLY;UNTIL=%s;BYDAY=%s', $until, $byDay));
@@ -94,7 +95,13 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 				return $model->saveField('google_event_id', $saved['id']);
 			} else {
 				$eventId = $model->data['Event']['google_event_id'];
+				$data['sequence'] = $model->data['Event']['google_event_sequence'] + 1;
 				$saved = $Events->update($calendarId, $eventId, $data);
+				if ($saved) {
+					$model->id = $model->data[$model->alias]['id'];
+					$model->Behaviors->disable('GoogleCalendarEvent');
+					return $model->saveField('google_event_sequence', $data['sequence']);
+				}
 			}
 		} else if (!$allowed && !empty($model->data[$model->alias]['google_event_id'])) {
 			$deleteAllowed = true;
