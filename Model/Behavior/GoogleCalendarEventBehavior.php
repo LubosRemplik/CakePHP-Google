@@ -39,7 +39,7 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 		}
 		$startTime = false;
 		$endTime = false;
-		if (!empty($model->data[$model->alias]['date'])) {
+		if ($allowed && !empty($model->data[$model->alias]['date'])) {
 			$startDate = strtotime($model->data[$model->alias]['date']);
 			$startDate = date('Y-m-d', $startDate);
 			if (!empty($model->data[$model->alias]['date_to'])) {
@@ -50,7 +50,7 @@ class GoogleCalendarEventBehavior extends ModelBehavior {
 				$endDate = date('Y-m-d', $endDate);
 			}
 		}
-		if (!empty($model->data[$model->alias]['days'])) {
+		if ($allowed && !empty($model->data[$model->alias]['days'])) {
 			date_default_timezone_set('UTC');
 			$until = gmdate("Ymd\THis\Z", strtotime($model->data[$model->alias]['date_to']));
 			$byDay = implode(',', $model->data[$model->alias]['days']);
