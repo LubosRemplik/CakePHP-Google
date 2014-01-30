@@ -99,8 +99,8 @@ class GoogleApi extends AppModel {
 			$response = $HttpSocket->request($requestRefreshToken);
 			if ($response->code != 200) {
 				if (Configure::read('debugApis')) {
-					debug($requestRefreshToken);
-					debug($response->body);
+					pr($requestRefreshToken);
+					pr($response->body);
 					die;
 				}
 				return false;
@@ -143,6 +143,13 @@ class GoogleApi extends AppModel {
 				die;
 			}
 			return false;
+		}
+		// debug
+		$debug = Configure::read('debugApis');
+		if ($debug && $debug > 1) {
+			debug($request);
+			debug($response->body);
+			die;
 		}
 
 		// parsing response
