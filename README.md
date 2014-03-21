@@ -12,7 +12,7 @@ Installlation
 	Add following to the `composer.json` file:
 
 		"require": {
-			"lubos/cakephp-google": "~1.0"
+			"lubos/google": "~1.0"
 		}
 
 	And run `php composer.phar update`

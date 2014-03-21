@@ -1,5 +1,5 @@
 {
-	"name": "lubos/cakephp-google",
+	"name": "lubos/google",
 	"description": "CakePHP Google plugin",
 	"type": "cakephp-plugin",
 	"require": {
