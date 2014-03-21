@@ -1,0 +1,11 @@
+{
+	"name": "lubos/cakephp-google",
+	"description": "CakePHP Google plugin",
+	"type": "cakephp-plugin",
+	"require": {
+		"cakephp/cakephp": "~2.0",
+		"composer/installers": "~1.0",
+		"lubos/cakephp-opauth": "~1.0",
+		"php": ">=5.2.8"
+	}
+}

@@ -6,18 +6,18 @@ Requirements
 [CakePHP v2.x](https://github.com/cakephp/cakephp)   
 [Opauth](https://github.com/LubosRemplik/cakephp-opauth)
 
-How to use it
+Installlation
 -------------
-1.	Install this plugin for your CakePHP app.   
-	Assuming `APP` is the directory where your CakePHP app resides, it's usually `app/` from the base of CakePHP.
+1.	Use [composer](https://getcomposer.org/doc/00-intro.md). 
+	Add following to the `composer.json` file:
 
-	```bash
-	cd APP/Plugin
-	git clone git://github.com/LubosRemplik/CakePHP-Google-API-Plugin.git Google
-	```
+		"require": {
+			"lubos/cakephp-google": "~1.0"
+		}
 
-2.  Install required plugins with all dependcies and configuration
-	[Opauth](https://github.com/LubosRemplik/cakephp-opauth)
+	And run `php composer.phar update`
+
+2.  Install required plugins with all dependcies and configuration (done via composer)
 
 3.  Connect google's account with your application http://example.org/auth/google
 
